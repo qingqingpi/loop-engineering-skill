@@ -1,5 +1,7 @@
 # Loop Engineering
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 A Claude Code skill for designing, evaluating, diagnosing, and hardening repeated or
 unattended AI-agent loops: systems where an agent attempts a task, an independent check
 verifies it, the agent revises from the failure evidence, and the system stops or escalates
@@ -167,4 +169,4 @@ scenarios several more times.
 
 ## License
 
-MIT. See [LICENSE](LICENSE). Replace `<YOUR NAME>` in the license file before publishing.
+MIT. See [LICENSE](LICENSE).
