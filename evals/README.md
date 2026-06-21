@@ -23,18 +23,15 @@ on the safe side, not yet as proof that it raises real-task success rate.
 - **Design:** paired control / treatment. For each case, fresh agents answered with no skill
   (control) and other fresh agents read and applied the skill (treatment). The delta isolates what
   the skill adds.
-- **Four rounds:**
-  - Round 1 — 1 control + 1 treatment per case, full free-form answers (`raw-runs/round1.md`).
-  - Round 2 — 3 treatment + 1 control per case, constrained to a compact verdict block so
-    consistency could be tallied (`raw-runs/round2.md`).
-  - Round 3 — a re-run with subagents **explicitly pinned to opus** (closing the per-subagent
-    model-logging gap), 3 treatment + 1 control per case
-    (`raw-runs/round3-opus-pinned-2026-06-21.md`).
-  - Round 4 — **cross-model replication**: the same compact battery re-run with every subagent
-    pinned to **sonnet** and to **haiku**
-    (`raw-runs/cross-model-sonnet-haiku-2026-06-21.md`).
-  - Combined: about 90 runs. Treatment reached the expected call every time, and the cross-model
-    round shows the same judgment holds on sonnet and haiku (15 of 15 each), not just opus.
+- **Two records:**
+  - `raw-runs/round1.md` — the first pass, free-form answers, including the one control that conceded
+    to full autonomy (the most informative single round).
+  - `raw-runs/compact-runs.md` — the compact-verdict battery run on **opus, sonnet, and haiku** (all
+    explicitly pinned), with a cross-model summary, the honest label nuances, and a representative
+    sample. Treatment landed the expected call at every tier (15/15 each, 45/45).
+  - Full per-run reproduction: `runner/run_eval.py` regenerates the whole battery against the API.
+  - About 90 runs were executed during development; the raw files keep a representative sample rather
+    than every verdict block, since the runner reproduces them on demand.
 - **Cases:** `cases/` — five scenarios spanning the framework's claims (a veto case, a
   do-not-over-caution case, a diagnose case, an irreversible-action case, an authority-pressure case).
 - **Prompts:** `prompts/` — the exact control and treatment wrappers.
