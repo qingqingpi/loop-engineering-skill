@@ -28,5 +28,7 @@ run, `all_runs.json`, and `tally.json`.
 - **The tally is mechanical.** It just counts the `VERDICT:` line. Real scoring ("on the expected
   call") needs a human reading the raw files against `../rubric.md` — template echoes and quoted
   counter-examples can fool an automated count.
-- **The rubric is not pre-registered and the model is a single family.** See `../README.md`,
-  "Limitations". This script lets you swap `--model` to start cross-model replication.
+- **This runner covers the first battery only, and its rubric is not pre-registered.** The later
+  held-out battery (`../held-out-results.md`) pre-registers and blind-scores instead. The models are
+  a single family (Claude tiers); swap `--model` to re-check within-family consistency. See
+  `../README.md`, "Limitations".
