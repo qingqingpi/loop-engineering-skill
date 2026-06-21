@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qingqingpi/loop-engineering-skill/schemas/loop-state.schema.json",
+  "title": "Loop state record",
+  "description": "Structured, lockable state for one work item in a loop, persisted outside the model context. Version fields make a mid-run change to the target detectable; state_version drives optimistic locking. Mirrors the example in loop-engineering/references/production-hardening.md.",
+  "type": "object",
+  "required": ["work_item_id", "attempt", "last_verdict", "state_version"],
+  "additionalProperties": true,
+  "properties": {
+    "goal_version": {"type": "string"},
+    "verifier_version": {"type": "string"},
+    "rubric_version": {"type": "string"},
+    "work_item_id": {"type": "string"},
+    "attempt": {"type": "integer", "minimum": 0},
+    "artifact_ref": {"type": "string", "description": "Pointer to the work product, e.g. worktree://repo/pr-418."},
+    "last_verdict": {"type": "string", "enum": ["pass", "fail", "pending", "escalated"]},
+    "failed_criteria": {"type": "array", "items": {"type": "string"}},
+    "failure_fingerprint": {"type": "string", "description": "Stable signature of the current failure; read by the no-progress check."},
+    "progress_metrics": {
+      "type": "object",
+      "description": "Real progress signals the no-progress check reads (e.g. failing_tests, unmet_rubric_items).",
+      "additionalProperties": {"type": "number"}
+    },
+    "budget_remaining": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "iterations": {"type": "integer"},
+        "tokens": {"type": "integer"},
+        "usd": {"type": "number"}
+      }
+    },
+    "pending_approval": {
+      "type": ["object", "null"],
+      "description": "Set when blocked at a commit gate waiting for a human."
+    },
+    "updated_at": {"type": "string", "format": "date-time"},
+    "state_version": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Drives optimistic locking; a write that finds this has moved must re-read rather than overwrite."
+    }
+  }
+}

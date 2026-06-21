@@ -38,15 +38,25 @@ Track per loop and in aggregate:
 
 ## Cost ceiling
 
-Bound worst-case spend explicitly before running unattended:
+Bound worst-case spend explicitly before running unattended. Separate the two quantities people
+conflate — **total spend** and **burn rate** — because concurrency changes the second, not the
+first:
 
 ```
-maximum_cost =
-    max_work_items
+maximum_total_cost =
+    global_item_cap                                   # total work items across the whole run
   × max_iterations_per_item
-  × (maker_cost + verifier_cost + tool_cost)
-  × concurrency_factor
+  × per_iteration_cost                                # maker_cost + verifier_cost + tool_cost
+
+maximum_burn_rate =                                   # spend per unit time + peak resource draw
+    concurrency
+  × per_iteration_cost
+  / iteration_duration
 ```
 
-If the worst case is unacceptable, the fix is tighter caps or a higher-fidelity (faster-stopping)
-verifier — not hoping the loop stops early on its own.
+`global_item_cap` is the total number of items across the whole run, so **concurrency does not
+multiply total cost** — it only raises how fast you spend it and your peak resource draw.
+(Multiplying total cost by a concurrency factor double-counts unless the cap is defined
+*per worker*.) If the **total** is unacceptable, the fix is tighter caps or a higher-fidelity,
+faster-stopping verifier — not hoping the loop stops early on its own. If the **burn rate** or peak
+is the problem, lower concurrency.

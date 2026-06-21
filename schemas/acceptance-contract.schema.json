@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/qingqingpi/loop-engineering-skill/schemas/acceptance-contract.schema.json",
+  "title": "Acceptance contract",
+  "description": "Machine-readable form of what 'done / good' means for one loop, in checkable terms. The maker must not modify this; a change creates a new goal_version requiring independent approval.",
+  "type": "object",
+  "required": ["goal_version", "criteria"],
+  "additionalProperties": false,
+  "properties": {
+    "goal_version": {
+      "type": "string",
+      "description": "Version of the goal/contract. Bumped only on an approved change, never by the maker."
+    },
+    "summary": {
+      "type": "string",
+      "description": "One-line human statement of the goal."
+    },
+    "criteria": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Each acceptance criterion: concrete and individually checkable.",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "check_type"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "description": "Stable id, e.g. AC-3."},
+          "statement": {"type": "string", "description": "Concrete, checkable statement (not 'high quality')."},
+          "check_type": {
+            "type": "string",
+            "enum": ["deterministic", "model-judge", "human", "holdout", "sentinel"]
+          },
+          "checker_ref": {"type": "string", "description": "Pointer to the check: test id, rubric item, or judge config."},
+          "hidden_from_maker": {
+            "type": "boolean",
+            "default": false,
+            "description": "True for holdout/sentinel criteria the maker must not see (anti-gaming)."
+          },
+          "weight": {"type": "number", "description": "Optional relative importance."}
+        }
+      }
+    },
+    "stop_conditions": {
+      "type": "object",
+      "description": "Implement all three; halt the moment any one trips.",
+      "additionalProperties": false,
+      "properties": {
+        "threshold": {"type": "string", "description": "What 'met' means, e.g. all criteria pass on the holdout set."},
+        "no_progress": {"type": "string", "description": "Executable definition of stalled progress (e.g. failing-criteria count stops dropping)."},
+        "budget": {"$ref": "#/$defs/budget"}
+      }
+    },
+    "irreversible_actions": {
+      "type": "array",
+      "description": "Actions that must live at the commit gate, outside the inner loop.",
+      "items": {"type": "string"}
+    }
+  },
+  "$defs": {
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_iterations": {"type": "integer", "minimum": 1},
+        "max_tokens": {"type": "integer", "minimum": 1},
+        "max_usd": {"type": "number", "minimum": 0}
+      }
+    }
+  }
+}

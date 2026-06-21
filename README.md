@@ -137,7 +137,9 @@ loop-engineering/
     extended-rationale.md      the inference-time-RL analogy, Goodhart, full failure-mode catalog
     production-hardening.md     verifier calibration (false-accept rate), idempotency, concurrency, state schema
     deployment.md              staged rollout, monitoring metrics, cost ceiling, kill switch
-README.md
+evals/                         open-sourced eval: cases, prompts, rubric, raw outputs, runner, limitations
+schemas/                       machine-readable JSON Schemas (contract, loop state, verifier result)
+README.md / README.zh-CN.md
 LICENSE
 ```
 
@@ -152,7 +154,7 @@ a fresh agent with no skill (control) and by a fresh agent that read and applied
 two control repetitions per scenario, so consistency could be measured rather than inferred from a
 single sample.
 
-- Treatment was consistent: 20 of 20 treatment runs reached the correct call (the right
+- Treatment was consistent: 20 of 20 treatment runs reached the expected call (the author-defined
   GREEN / YELLOW / RED verdict and the right gate decision), and the repetitions converged on the
   same verdict, the same gate, and the same core risk. Low variance across repetitions is the
   signal that the guidance is binding rather than noise.
@@ -175,6 +177,13 @@ consistency (it removes that wobble), avoiding over-caution, and the sharper voc
 structured, checkable verdicts it produces (control plane, false-acceptance rate, the
 prepare-preview-approve-commit sequence). That value is largest on smaller or faster models and
 across many repeated runs, where the base instinct is least reliable.
+
+Full data is open-sourced in [`evals/`](evals/): the cases, the exact control and treatment prompts,
+the scoring rubric, every raw output (including the round where the control held instead of caving,
+and the cosmetic verdict-label wobble on the diagnose case), and a standalone re-runnable script.
+It ships with an explicit limitations writeup — the rubric was author-defined and not pre-registered
+(a real circularity risk), sampling parameters were harness defaults, and only consistency and
+judgment-shape were measured, not real-task success rate. The raw runs are unfiltered on purpose.
 
 ## License
 

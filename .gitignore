@@ -1,3 +1,5 @@
 .DS_Store
 *.skill
 *.bak
+__pycache__/
+evals/runner/results/
