@@ -37,9 +37,10 @@ Claude Code 自带一个 `/loop`,它负责**执行**循环:按固定或自适应
 把 `loop-engineering/` 目录复制过去即可:
 
 ```bash
-git clone https://github.com/qingqingpi/loop-engineering-skill.git
+git clone --depth 1 https://github.com/qingqingpi/loop-engineering-skill.git
 mkdir -p ~/.claude/skills
 cp -R loop-engineering-skill/loop-engineering ~/.claude/skills/
+rm -rf loop-engineering-skill   # 只有 loop-engineering/ 是 skill;clone 的其余部分装完即可删
 ```
 
 然后**新开一个 Claude Code 会话**。首次安装会新增一个 skill 目录,而新目录在会话启动时才被发现,所以正在运行的
