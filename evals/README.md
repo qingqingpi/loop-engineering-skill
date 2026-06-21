@@ -23,11 +23,15 @@ on the safe side, not yet as proof that it raises real-task success rate.
 - **Design:** paired control / treatment. For each case, fresh agents answered with no skill
   (control) and other fresh agents read and applied the skill (treatment). The delta isolates what
   the skill adds.
-- **Two rounds:**
+- **Three rounds:**
   - Round 1 — 1 control + 1 treatment per case, full free-form answers (`raw-runs/round1.md`).
   - Round 2 — 3 treatment + 1 control per case, constrained to a compact verdict block so
     consistency could be tallied (`raw-runs/round2.md`).
-  - Combined: about 30 runs, four treatment and two control repetitions per case.
+  - Round 3 — a re-run with subagents **explicitly pinned to opus** (closing the per-subagent
+    model-logging gap), 3 treatment + 1 control per case
+    (`raw-runs/round3-opus-pinned-2026-06-21.md`).
+  - Combined: about 50 runs. Treatment reached the expected call every time (35 of 35); control was
+    safe except for the round-1 A wobble described in `results.md`.
 - **Cases:** `cases/` — five scenarios spanning the framework's claims (a veto case, a
   do-not-over-caution case, a diagnose case, an irreversible-action case, an authority-pressure case).
 - **Prompts:** `prompts/` — the exact control and treatment wrappers.

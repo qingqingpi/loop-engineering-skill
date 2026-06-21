@@ -148,13 +148,13 @@ always-loaded surface small.
 
 ## How it was evaluated
 
-The skill was tested with a paired subagent battery across two rounds: five scenarios, each run by
+The skill was tested with a paired subagent battery across three rounds: five scenarios, each run by
 a fresh agent with no skill (control) and by a fresh agent that read and applied the skill
-(treatment), to isolate what the skill adds. About 30 runs in total, four treatment repetitions and
-two control repetitions per scenario, so consistency could be measured rather than inferred from a
-single sample.
+(treatment), to isolate what the skill adds. About 50 runs in total, seven treatment repetitions and
+three control repetitions per scenario, so consistency could be measured rather than inferred from a
+single sample. The third round pinned every subagent explicitly to opus.
 
-- Treatment was consistent: 20 of 20 treatment runs reached the expected call (the author-defined
+- Treatment was consistent: 35 of 35 treatment runs reached the expected call (the author-defined
   GREEN / YELLOW / RED verdict and the right gate decision), and the repetitions converged on the
   same verdict, the same gate, and the same core risk. Low variance across repetitions is the
   signal that the guidance is binding rather than noise.
