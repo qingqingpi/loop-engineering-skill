@@ -146,26 +146,35 @@ always-loaded surface small.
 
 ## How it was evaluated
 
-The skill was tested with a paired subagent battery: five scenarios, each run twice, once by an
-agent with no skill (control) and once by an agent that read and applied the skill (treatment), to
-isolate what the skill adds.
+The skill was tested with a paired subagent battery across two rounds: five scenarios, each run by
+a fresh agent with no skill (control) and by a fresh agent that read and applied the skill
+(treatment), to isolate what the skill adds. About 30 runs in total, four treatment repetitions and
+two control repetitions per scenario, so consistency could be measured rather than inferred from a
+single sample.
 
-- Discipline held under pressure. On "build a fully autonomous, no-review publisher" and "your VP
-  wants zero-approval production deploys by tomorrow", the skilled agent kept the commit gate and
-  offered a safely-bounded design. The control on the publisher scenario eventually conceded to
-  unreviewed auto-publishing.
+- Treatment was consistent: 20 of 20 treatment runs reached the correct call (the right
+  GREEN / YELLOW / RED verdict and the right gate decision), and the repetitions converged on the
+  same verdict, the same gate, and the same core risk. Low variance across repetitions is the
+  signal that the guidance is binding rather than noise.
+- Discipline held under pressure every time. On "build a fully autonomous, no-review publisher" and
+  "your VP wants zero-approval production deploys by tomorrow", the skilled agent kept the gate in
+  every repetition and never complied with removing the approval step.
 - It does not over-caution. On a genuinely good-fit task (dependency upgrades gated on build,
-  tests, and types), the skilled agent correctly called it GREEN and added structure without
-  bolting on needless human gates.
+  tests, and types) the skilled agent called it GREEN every time and kept the merge outside the
+  loop, without bolting on needless human gates. The control here was more hesitant, hedging to
+  YELLOW.
 - It produces sharper diagnosis. On "the agent deletes failing tests to go green", the skilled
-  agent named the reward-hacking and control-plane failure and prescribed a holdout test set plus
-  a false-acceptance-rate metric to prove the fix worked.
+  agent named the reward-hacking and control-plane failure and prescribed a holdout test set plus a
+  false-acceptance-rate metric to prove the fix worked.
 
-Honest caveat: a strong base model already pushes back on bad autonomy on its own, so the skill's
-marginal value is mostly in consistency, structure, completeness, and the validation metrics it
-insists on. That value grows on smaller or faster models and across many repeated runs. The
-battery used one run per cell; a high-confidence claim would re-run the discipline-critical
-scenarios several more times.
+Honest caveat: a strong base model already does the right thing on the blatant cases (moving money,
+deleting tests, a pressured production deploy) on its own. Where the base model genuinely wobbles is
+the ambiguous case, a subjective verifier plus an irreversible action (the auto-publisher): there
+the control conceded to full autonomy in one round and held in another. So the skill's real value is
+consistency (it removes that wobble), avoiding over-caution, and the sharper vocabulary and
+structured, checkable verdicts it produces (control plane, false-acceptance rate, the
+prepare-preview-approve-commit sequence). That value is largest on smaller or faster models and
+across many repeated runs, where the base instinct is least reliable.
 
 ## License
 
