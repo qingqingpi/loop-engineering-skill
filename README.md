@@ -148,42 +148,42 @@ always-loaded surface small.
 
 ## How it was evaluated
 
-The skill was tested with a paired subagent battery across three rounds: five scenarios, each run by
-a fresh agent with no skill (control) and by a fresh agent that read and applied the skill
-(treatment), to isolate what the skill adds. About 50 runs in total, seven treatment repetitions and
-three control repetitions per scenario, so consistency could be measured rather than inferred from a
-single sample. The third round pinned every subagent explicitly to opus.
+The skill was tested with a paired control/treatment battery. For each case, fresh agents answered
+without the skill (control) and other fresh agents read and applied it (treatment), so the difference
+isolates what the skill adds. Five scenarios ran on three model tiers, opus, sonnet, and haiku, with
+every subagent pinned to its model.
 
-- Treatment was consistent: 35 of 35 treatment runs reached the expected call (the author-defined
-  GREEN / YELLOW / RED verdict and the right gate decision), and the repetitions converged on the
-  same verdict, the same gate, and the same core risk. Low variance across repetitions is the
-  signal that the guidance is binding rather than noise.
-- Discipline held under pressure every time. On "build a fully autonomous, no-review publisher" and
-  "your VP wants zero-approval production deploys by tomorrow", the skilled agent kept the gate in
-  every repetition and never complied with removing the approval step.
-- It does not over-caution. On a genuinely good-fit task (dependency upgrades gated on build,
-  tests, and types) the skilled agent called it GREEN every time and kept the merge outside the
-  loop, without bolting on needless human gates. The control here was more hesitant, hedging to
-  YELLOW.
-- It produces sharper diagnosis. On "the agent deletes failing tests to go green", the skilled
-  agent named the reward-hacking and control-plane failure and prescribed a holdout test set plus a
-  false-acceptance-rate metric to prove the fix worked.
+Treatment landed the expected call at every tier: 15 of 15 on each, 45 of 45 in total. A loop that is
+RED on opus is RED on haiku, and a GREEN stays GREEN. The runs converged on the same verdict, the
+same gate decision, and the same core risk, which is the signal that the guidance binds rather than
+reads as noise.
+
+What the runs show:
+
+- Discipline holds under pressure. On "build a fully autonomous, no-review publisher" and "your VP
+  wants zero-approval production deploys by tomorrow", the skilled agent kept the gate every time and
+  never agreed to remove the approval step.
+- It does not over-caution. On a genuinely good-fit task (dependency upgrades gated on build, tests,
+  and types) the skilled agent called it GREEN and kept the merge outside the loop. The controls were
+  more hesitant, hedging to YELLOW or dropping the merge gate.
+- It produces sharper diagnosis. On "the agent deletes failing tests to go green" the skilled agent
+  named the reward-hacking and control-plane failure and prescribed a holdout test set plus a
+  false-acceptance-rate metric to confirm the fix.
 
 Honest caveat: a strong base model already does the right thing on the blatant cases (moving money,
-deleting tests, a pressured production deploy) on its own. Where the base model genuinely wobbles is
-the ambiguous case, a subjective verifier plus an irreversible action (the auto-publisher): there
-the control conceded to full autonomy in one round and held in another. So the skill's real value is
-consistency (it removes that wobble), avoiding over-caution, and the sharper vocabulary and
-structured, checkable verdicts it produces (control plane, false-acceptance rate, the
-prepare-preview-approve-commit sequence). That value is largest on smaller or faster models and
-across many repeated runs, where the base instinct is least reliable.
+deleting tests, a pressured deploy) on its own. The place it genuinely wobbles is the ambiguous case,
+a subjective verifier plus an irreversible action (the auto-publisher), where one control conceded to
+full autonomy. So the skill's measured value is consistency (it removes that wobble), no
+over-caution, and the sharper, checkable verdicts it produces. The value is largest on smaller or
+faster models and across many repeated runs, where the base instinct is least reliable.
 
-Full data is open-sourced in [`evals/`](evals/): the cases, the exact control and treatment prompts,
-the scoring rubric, every raw output (including the round where the control held instead of caving,
-and the cosmetic verdict-label wobble on the diagnose case), and a standalone re-runnable script.
-It ships with an explicit limitations writeup — the rubric was author-defined and not pre-registered
-(a real circularity risk), sampling parameters were harness defaults, and only consistency and
-judgment-shape were measured, not real-task success rate. The raw runs are unfiltered on purpose.
+Full data is in [`evals/`](evals/): the cases, the exact control and treatment prompts, the scoring
+rubric, raw outputs, and a standalone runner that reproduces the whole battery against the API. It
+ships with an explicit limitations writeup. The rubric was author-defined and not pre-registered,
+which is a real circularity risk; sampling parameters were harness defaults; and only consistency and
+judgment-shape were measured, not real-task success rate. About 90 runs were executed during
+development, and the raw files keep a representative sample since the runner regenerates the rest on
+demand.
 
 ## License
 
