@@ -43,7 +43,8 @@ This is a personal Claude Code skill. Personal skills live in `~/.claude/skills/
 per skill. To install, copy the `loop-engineering/` directory there:
 
 ```bash
-git clone <this-repo-url> loop-engineering-skill
+git clone https://github.com/qingqingpi/loop-engineering-skill.git
+mkdir -p ~/.claude/skills
 cp -R loop-engineering-skill/loop-engineering ~/.claude/skills/
 ```
 
