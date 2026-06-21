@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ST1_budget_blowout",
+    "kind": "should-trigger",
+    "request": "How do I stop my overnight coding agent from burning through $400 of API calls grinding on a task it's never actually going to finish?",
+    "expected_trigger": true,
+    "rationale": "Unattended agent, budget cap, and no-progress / stop-condition design. Core loop-engineering territory even though the word 'loop' is never used."
+  },
+  {
+    "id": "ST2_maker_checker_same_model",
+    "kind": "should-trigger",
+    "request": "Our maker-checker pipeline keeps approving bad outputs. The checker is just another call to the same model with the same prompt. How do I make the review step actually catch the bad ones?",
+    "expected_trigger": true,
+    "rationale": "Verifier fidelity and maker/checker independence in a repeated review pipeline. Directly the skill's spine."
+  },
+  {
+    "id": "ST3_queue_stuck_items",
+    "kind": "should-trigger",
+    "request": "We've got a queue of about 5,000 records and an agent that fixes each one, re-validates, retries on failure, and moves on. It clears 4,900 fine but spins forever on a handful. How should I structure this so it doesn't get stuck?",
+    "expected_trigger": true,
+    "rationale": "Queue-processing agent that retries/revises items against a validator, with a stuck-item / no-progress problem. Squarely in scope."
+  },
+  {
+    "id": "SN1_cron_pg_backup",
+    "kind": "should-not-trigger",
+    "request": "Write me a Python script that dumps my Postgres database and uploads the backup to S3 every night on a cron schedule.",
+    "expected_trigger": false,
+    "rationale": "Ordinary deterministic automation: no agent, no attempt/verify/revise loop. A named non-fit. Sanity check that the obvious case does not over-fire."
+  },
+  {
+    "id": "SN2_etl_retry",
+    "kind": "should-not-trigger",
+    "request": "I have a deterministic ETL pipeline: extract from a vendor API, transform, load to the warehouse, hourly. Occasionally a row fails schema validation and I want it to retry that row up to 3 times before skipping. How should I add the retry?",
+    "expected_trigger": false,
+    "rationale": "The real boundary test: 'retry on validation failure' sounds like the queue/verify loop, but this is deterministic code with simple retries, no agent and no revise-against-feedback. Not named in the description, so it tests whether the boundary generalizes. Over-firing here means the description is too broad on 'retry/queue'."
+  },
+  {
+    "id": "SN3_parallel_research_fanout",
+    "kind": "should-not-trigger",
+    "request": "I want to run 10 agents in parallel, each researching a different competitor, then stitch their write-ups into one report. How should I wire that up?",
+    "expected_trigger": false,
+    "rationale": "Parallel fan-out with a final merge, no iterative revision of items against feedback. The commonly-confused case; the description excludes 'parallel agents that don't iteratively revise against feedback.'"
+  }
+]
