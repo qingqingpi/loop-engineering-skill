@@ -10,7 +10,8 @@ the most valuable, and it is still open.
 
 1. **Consistency** — across repeated runs, does the skill produce the same judgment? (Measured.)
 2. **Judgment quality** — are the GREEN / YELLOW / RED verdicts and gate decisions reasonable on
-   the cases? (Measured, by the author.)
+   the cases? (Measured. The first battery scored this by the author; the **held-out battery** below
+   adds new cases the skill has never seen plus two independent, blind scorers.)
 3. **Real-task effect** — does using the skill actually reduce wrong approvals, unsafe automation,
    and verifier holes on real work? (NOT measured here. This is the layer that would prove value;
    see Limitations.)
@@ -23,17 +24,23 @@ on the safe side, not yet as proof that it raises real-task success rate.
 - **Design:** paired control / treatment. For each case, fresh agents answered with no skill
   (control) and other fresh agents read and applied the skill (treatment). The delta isolates what
   the skill adds.
-- **Two records:**
+- **Three records:**
   - `raw-runs/round1.md` — the first pass, free-form answers, including the one control that conceded
     to full autonomy (the most informative single round).
   - `raw-runs/compact-runs.md` — the compact-verdict battery run on **opus, sonnet, and haiku** (all
     explicitly pinned), with a cross-model summary, the honest label nuances, and a representative
     sample. Treatment landed the expected call at every tier (15/15 each, 45/45).
-  - Full per-run reproduction: `runner/run_eval.py` regenerates the whole battery against the API.
-  - About 90 runs were executed during development; the raw files keep a representative sample rather
-    than every verdict block, since the runner reproduces them on demand.
-- **Cases:** `cases/` — five scenarios spanning the framework's claims (a veto case, a
-  do-not-over-caution case, a diagnose case, an irreversible-action case, an authority-pressure case).
+  - `raw-runs/held-out-2026-06-21.md` — the **held-out battery**: six judgment cases in new domains
+    (none in the skill, references, or READMEs), weighted to the ambiguous boundary, plus six
+    should-trigger / should-not-trigger cases. Rubric **pre-registered** before the runs
+    (`rubric.held-out.md`), scored **blind** by two independent agents, and reproduced here **in full**
+    (every run, not a sample). Scored in `held-out-results.md`.
+  - Full per-run reproduction: `runner/run_eval.py` regenerates the first battery against the API.
+  - About 90 runs were executed for the first two records; those raw files keep a representative
+    sample since the runner reproduces them on demand. The held-out record keeps every run.
+- **Cases:** `cases/cases.json` — the first five scenarios (a veto case, a do-not-over-caution case,
+  a diagnose case, an irreversible-action case, an authority-pressure case). `cases/held-out-cases.json`
+  and `cases/trigger-cases.json` — the held-out set, committed before its runs.
 - **Prompts:** `prompts/` — the exact control and treatment wrappers.
 - **Scoring:** `rubric.md` — the expected call per case, and the honest caveat about how "expected"
   was defined.
@@ -57,10 +64,12 @@ on the safe side, not yet as proof that it raises real-task success rate.
 
 This is an early-stage eval, not a benchmark. It is deliberately honest about that:
 
-1. **The rubric was not pre-registered.** The author defined the expected verdict per case, and the
-   scoring crystallized after round 1. There is a real circularity risk: a "correct"
-   GREEN / YELLOW / RED can be partly defined by the very skill under test. `rubric.md` states the
-   expected verdicts explicitly so you can disagree with them.
+1. **The first rubric was not pre-registered.** For the original five cases the author defined the
+   expected verdict and the scoring crystallized after round 1, a real circularity risk: a "correct"
+   GREEN / YELLOW / RED can be partly defined by the very skill under test. The **held-out battery
+   fixes this** — its rubric was committed before any run and scored blind by two independent agents,
+   and it caught an author miscalibration (the H2 case; see `held-out-results.md`). The remaining gap
+   is that one author still *chose* the held-out cases.
 2. **Sampling parameters were not controlled.** The subagent dispatches used harness defaults;
    temperature, max tokens, and exact per-subagent model version were not independently logged. The
    `runner/` script makes all of these explicit.
@@ -78,6 +87,7 @@ visible rather than hidden.
 
 ## What would make this a real benchmark
 
-In rough priority: (1) a pre-registered rubric scored by an independent, non-author judge; (2) a
+In rough priority: (1) held-out cases *chosen* by a non-author (the held-out battery already
+pre-registers its rubric and scores it blind, but the author still picked the scenarios); (2) a
 layer-3 real-task experiment with an objective outcome signal; (3) cross-vendor and cross-author
 replication; (4) cost and latency per run. Contributions welcome.

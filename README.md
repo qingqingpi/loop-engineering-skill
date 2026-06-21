@@ -187,11 +187,23 @@ full autonomy. So the skill's measured value is consistency (it removes that wob
 over-caution, and the sharper, checkable verdicts it produces. The value is largest on smaller or
 faster models and across many repeated runs, where the base instinct is least reliable.
 
+A fair concern about that first battery was that four of its five cases echoed examples already in
+this README, so a pass partly measured recall. A follow-up [held-out battery](evals/held-out-results.md)
+answers it: six new cases in domains the skill never mentions (support auto-reply, lint-and-merge,
+hiring rejections, a noisy-metric optimization loop, doc translation, strategy writing), weighted to
+the ambiguous boundary, with the rubric pre-registered before the runs and scored blind by two
+independent agents. The skilled agent landed the expected call on five of six, and on the sixth it
+overrode a mistaken author prediction in the right direction, so the pre-registration caught my error
+rather than the skill's. A separate trigger test got six of six: it fires on real loop problems and
+stays silent on a backup script, a deterministic ETL retry, and a parallel research fan-out. This
+reinforces the same honest finding rather than overturning it: on a strong model the lift is
+consistency, firmness, and sharper vocabulary, not rescue from disaster.
+
 Full data is in [`evals/`](evals/): the cases, the exact control and treatment prompts, the scoring
-rubric, raw outputs, and a standalone runner that reproduces the whole battery against the API. It
-ships with an explicit limitations writeup. The rubric was author-defined and not pre-registered,
-which is a real circularity risk; sampling parameters were harness defaults; and only consistency and
-judgment-shape were measured, not real-task success rate. About 90 runs were executed during
+rubric, raw outputs, and a standalone runner that reproduces the first battery against the API. It
+ships with an explicit limitations writeup. The first battery's rubric was author-defined and not
+pre-registered, a real circularity risk the held-out battery addresses; sampling parameters were
+harness defaults; and only consistency and judgment-shape were measured, not real-task success rate. About 90 runs were executed during
 development, and the raw files keep a representative sample since the runner regenerates the rest on
 demand.
 
