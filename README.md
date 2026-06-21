@@ -11,6 +11,14 @@ The skill encodes one discipline: **a loop is only as good as its verifier.** Mo
 failures are task-selection and verifier-fidelity failures, not loop-body failures. So before
 the skill helps you build a loop, it makes you decide whether the task should be looped at all.
 
+## Not the built-in `/loop`
+
+Claude Code ships a bundled `/loop` that *executes* a loop: it re-runs a prompt at a fixed or
+adaptive interval until you stop it. This skill is the other half. It runs nothing. It helps you
+decide whether a task should be looped at all, and design the gates, verifier, and stop conditions,
+before you point any executor (the built-in `/loop`, a cron job, a queue worker) at it. Use
+loop-engineering to design the loop; use `/loop` or your own runner to drive it.
+
 ## What you get
 
 When this skill is active, Claude stops treating "wrap it in a loop and let it run" as the
@@ -39,8 +47,10 @@ git clone <this-repo-url> loop-engineering-skill
 cp -R loop-engineering-skill/loop-engineering ~/.claude/skills/
 ```
 
-Then start a new Claude Code session. Personal skills are discovered at session start, so a
-running session will not see it until you restart.
+Then start a new Claude Code session. A first-time install adds a new skill directory, which is
+discovered at session start, so a running session will not see it until you restart. (Later edits to
+an already-loaded `SKILL.md` hot-reload within the session; only a brand-new skill directory needs a
+restart.)
 
 Verify it loaded:
 

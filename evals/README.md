@@ -43,12 +43,15 @@ on the safe side, not yet as proof that it raises real-task success rate.
 
 ## Provenance
 
-- **Model:** `claude-opus-4-8` (Claude Opus 4.8), the session model. The original runs executed as
-  Claude Code subagents, which inherit the parent model.
+- **Models:** two passes. The first free-form round (`raw-runs/round1.md`) ran as Claude Code
+  subagents on `claude-opus-4-8` (Claude Opus 4.8), the session model. The compact-verdict battery
+  (`raw-runs/compact-runs.md`) was then run across three tiers, each subagent explicitly pinned:
+  `claude-opus-4-8`, `claude-sonnet-4-6`, and `claude-haiku-4-5-20251001`. All three are Claude models
+  from one vendor, so this is within-family replication, not cross-vendor.
 - **Date:** 2026-06-21.
 - **Skill version:** the optimized skill published in this repo (`loop-engineering/`).
-- **Harness:** the original runs were dispatched as Claude Code subagents that read the installed
-  `SKILL.md`. That is not a clean parameterized script, which is why `runner/` exists.
+- **Harness:** runs were dispatched as Claude Code subagents that read the installed `SKILL.md`. That
+  is not a clean parameterized script, which is why `runner/` exists.
 
 ## Limitations (read these before trusting the numbers)
 
@@ -61,7 +64,9 @@ This is an early-stage eval, not a benchmark. It is deliberately honest about th
 2. **Sampling parameters were not controlled.** The subagent dispatches used harness defaults;
    temperature, max tokens, and exact per-subagent model version were not independently logged. The
    `runner/` script makes all of these explicit.
-3. **Single model, single author, single day.** No cross-model or cross-author replication yet.
+3. **One vendor, single author, single day.** The battery replicates across three Claude tiers (opus,
+   sonnet, haiku) but not across vendors, and one author defined and scored it. No cross-vendor or
+   cross-author replication yet.
 4. **Layer 3 is untested.** These runs measure consistency and the shape of the judgment, not
    whether the skill reduces real errors on real tasks. That experiment is not here yet.
 5. **Non-determinism.** LLM outputs vary run to run, so exact tallies will not reproduce bit for
@@ -74,5 +79,5 @@ visible rather than hidden.
 ## What would make this a real benchmark
 
 In rough priority: (1) a pre-registered rubric scored by an independent, non-author judge; (2) a
-layer-3 real-task experiment with an objective outcome signal; (3) cross-model and cross-author
+layer-3 real-task experiment with an objective outcome signal; (3) cross-vendor and cross-author
 replication; (4) cost and latency per run. Contributions welcome.

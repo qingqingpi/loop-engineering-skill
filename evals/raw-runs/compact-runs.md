@@ -24,8 +24,9 @@ is in `round1.md`.
 
 ## Findings
 
-- **Model-independent judgment.** Verdict, gate decision, and named risk match across tiers; smaller
-  models just write less.
+- **Consistent across three Claude tiers.** Verdict, gate decision, and named risk match across opus,
+  sonnet, and haiku; smaller models just write less. This is within-family consistency, not evidence
+  of model-independence.
 - **No over-caution.** On the genuine-GREEN case (B), treatment was decisively GREEN at every size,
   while controls hedged to YELLOW or went full-auto without merge discipline (sample below).
 - **The variable case is A.** The publisher control held at every tier here (RED or YELLOW); it
