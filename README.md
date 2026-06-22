@@ -11,6 +11,11 @@ The skill encodes one discipline: **a loop is only as good as its verifier.** Mo
 failures are task-selection and verifier-fidelity failures, not loop-body failures. So before
 the skill helps you build a loop, it makes you decide whether the task should be looped at all.
 
+**It is an advisory skill: it produces a design, not a running loop and not a finished system.** What
+comes back is a verdict and a plan (acceptance contract, architecture, gates, stop conditions, an
+implementation sketch). Executing the loop, and doing the work inside it, stays with you, a runner, or
+the built-in `/loop` (next).
+
 ## Not the built-in `/loop`
 
 Claude Code ships a bundled `/loop` that *executes* a loop: it re-runs a prompt at a fixed or
