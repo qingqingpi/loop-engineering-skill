@@ -24,8 +24,10 @@ loop-engineering to design the loop; use `/loop` or your own runner to drive it.
 When this skill is active, Claude stops treating "wrap it in a loop and let it run" as the
 default. Instead it:
 
-- Routes the task to a GREEN / YELLOW / RED verdict before designing anything, with two hard
-  vetoes: no faithful verifier, or an irreversible action that cannot be gated.
+- Separates two questions the usual single verdict blurs: is the *task* loop-fit (GREEN / YELLOW /
+  RED), and is the *design you proposed* safe (an irreversible action inside the loop is unsafe even
+  when the task is GREEN). Two hard vetoes give RED: no faithful verifier, or an irreversible action
+  that cannot be gated.
 - Extracts a checkable acceptance contract ("what does done / good actually mean?") before building.
 - Designs the loop in three layers: an outer scheduler, an inner refinement loop, and a commit
   gate that holds every irreversible or externally visible effect outside the loop body.
@@ -35,7 +37,8 @@ default. Instead it:
   It gives you the closest safely-bounded design and is honest when a task cannot be fully
   automated yet.
 
-It serves five entry points (modes): assess, design, diagnose, harden, implement.
+It serves four entry points (modes): assess, design, diagnose, and harden. Each produces a loop
+design, not a running loop; executing the loop is a separate step (a runner, or the built-in `/loop`).
 
 ## Quick start
 

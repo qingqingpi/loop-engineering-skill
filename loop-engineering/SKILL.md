@@ -1,5 +1,6 @@
 ---
 name: loop-engineering
+version: 0.2.0
 description: Use when designing, evaluating, diagnosing, or hardening a repeated or unattended AI-agent loop that attempts work, verifies it, revises against feedback, and stops or escalates under a budget — self-running agents, maker-checker systems, queue-processing agents that retry or revise items against a verifier, multi-agent refinement, or a loop that drifts, burns tokens, or passes its checks while missing the real goal. Not for one-shot prompting, ordinary deterministic automation (backup script, scheduled scrape, batch rename), or parallel agents that don't iteratively revise against feedback.
 ---
 
@@ -22,35 +23,44 @@ When this skill activates, apply the framework **silently** — do not recite it
 First route to a mode. All modes share one skeleton — triage → acceptance contract → architecture — and differ only in entry point and what you return:
 
 - **assess** — "is this a good fit for a loop?" → stop after the triage verdict + decisive reasons.
-- **design** — build a loop for a fit task → full Required output.
+- **design** — build a loop for a fit task → full Required output, including an implementation sketch (pseudocode / structure, or concrete code when the platform and interfaces are given) as a design artifact.
 - **diagnose** — an existing loop drifts / burns tokens / passes checks but misses intent → go to the failure-mode audit (`references/extended-rationale.md`) and return the specific fix.
 - **harden** — a working loop heading to production → `references/production-hardening.md` + `references/deployment.md`.
-- **implement** — write the actual loop → full Required output including a working implementation.
 
-Default sequence (design / implement):
+This skill **designs** loops; it does not run them. The deliverable is the design — verdict, acceptance contract, architecture, and an implementation sketch. Executing the loop is the job of a runner or the built-in `/loop`.
+
+Default sequence (design):
 1. Identify the mode.
 2. Decide whether the task needs a loop at all (don't loop a one-shot or ordinary deterministic automation).
-3. Return a GREEN / YELLOW / RED verdict with the decisive reasons.
+3. Return the split verdict (see "Two verdicts, not one"): task loop-fit, as-specified-design safety, and safe-redesign fit — with decisive reasons.
 4. Define or draft the acceptance contract.
-5. Design the loop **only if the verdict permits**; lay out outer scheduler / inner loop / commit gate.
+5. Design the loop **only if the safe-redesign fit permits**; lay out outer scheduler / inner loop / commit gate.
 6. Bound cost, side effects, retries, concurrency, escalation.
-7. If RED, produce a gated / sandboxed / draft-only alternative — not a full-auto design.
+7. If a hard veto fires or the as-specified design is unsafe, produce a gated / sandboxed / draft-only redesign — not a full-auto design.
 
 ## Required output
 
-Design / implement modes return:
-1. **Loop-fit verdict** — GREEN / YELLOW / RED + decisive reasons.
+Design mode returns:
+1. **Verdict — three separate calls, never collapsed into one color:**
+   - **Task loop-fit** — GREEN / YELLOW / RED for the *task itself* (verifier fidelity + feedback diagnosticity).
+   - **As-specified design** — SAFE / UNSAFE / CONDITIONAL for the *architecture the user proposed* (an irreversible action inside the loop is UNSAFE even when the task is GREEN).
+   - **Safe-redesign fit** — GREEN / YELLOW / RED once the design is corrected (gates added, irreversible actions moved out).
+   - Plus the deciding fields: verifier fidelity (high / medium / low / none), feedback diagnosticity (dense / sparse-diagnostic / sparse-nondiagnostic), each irreversible action and whether it is gateable, whether a hard veto fired (and why), and the required gate.
 2. **Assumptions** — every decision made without explicit user input, flagged.
 3. **Acceptance contract** — what "done / good" means, in checkable terms.
 4. **Loop specification** — outer / inner / commit-gate, verifier, stop conditions.
 5. **Approval & escalation policy** — gates before side effects; escalation triggers.
 6. **Budget & observability** — caps + what to measure.
-7. **Implementation** — the actual loop when the platform / interfaces are known; pseudocode or a plan only when those details are missing.
+7. **Implementation sketch** — pseudocode / structure for the maker, verifier, gate, and stop checks; concrete code only when the platform and interfaces are given. A design artifact, not a running loop.
 
 Other modes return:
-- **assess** — verdict, decisive evidence, the main blocker, recommended next step.
+- **assess** — the split verdict (task loop-fit / as-specified-design safety / safe-redesign fit), decisive evidence, the main blocker, recommended next step.
 - **diagnose** — observed symptom, likely root cause, the verifier / state / policy gap, a concrete patch, and the metric that will prove the patch worked.
 - **harden** — production gaps, required controls, rollout stage, kill criteria, remaining human gates.
+
+## Two verdicts, not one
+
+Separate **"is the task loop-fit?"** from **"is the design the user proposed safe?"** — different questions, and collapsing them yields unexplainable colors. A nightly lint/format loop is task-fit **GREEN** (cheap, deterministic, reversible verifier), yet "merge straight to main inside the retry loop" is an **UNSAFE** as-specified design, and the safe redesign (open a PR, commit gate outside the loop) is **GREEN** again. Report task loop-fit, as-specified-design safety, and safe-redesign fit separately. The user not having proposed a gate does not make the task RED — designing the gate is this skill's job.
 
 ## Task-fit triage (do this FIRST — most loop failures are task-selection failures)
 

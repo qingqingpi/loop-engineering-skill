@@ -24,7 +24,7 @@ on the safe side, not yet as proof that it raises real-task success rate.
 - **Design:** paired control / treatment. For each case, fresh agents answered with no skill
   (control) and other fresh agents read and applied the skill (treatment). The delta isolates what
   the skill adds.
-- **Three records:**
+- **Records:**
   - `raw-runs/round1.md` — the first pass, free-form answers, including the one control that conceded
     to full autonomy (the most informative single round).
   - `raw-runs/compact-runs.md` — the compact-verdict battery run on **opus, sonnet, and haiku** (all
@@ -35,6 +35,9 @@ on the safe side, not yet as proof that it raises real-task success rate.
     should-trigger / should-not-trigger cases. Rubric **pre-registered** before the runs
     (`rubric.held-out.md`), scored **blind** by two independent agents, and reproduced here **in full**
     (every run, not a sample). Scored in `held-out-results.md`.
+  - `raw-runs/split-verdict-validation-2026-06-22.md` — the **v0.2 split-verdict re-run**: the GREEN
+    test for dropping the `implement` mode and splitting the verdict into task loop-fit /
+    as-specified-design safety / safe-redesign fit. H2 resolves cleanly. See `ROADMAP.md`.
   - Full per-run reproduction: `runner/run_eval.py` regenerates the first battery against the API.
   - About 90 runs were executed for the first two records; those raw files keep a representative
     sample since the runner reproduces them on demand. The held-out record keeps every run.
