@@ -38,6 +38,9 @@ on the safe side, not yet as proof that it raises real-task success rate.
   - `raw-runs/split-verdict-validation-2026-06-22.md` — the **v0.2 split-verdict re-run**: the GREEN
     test for dropping the `implement` mode and splitting the verdict into task loop-fit /
     as-specified-design safety / safe-redesign fit. H2 resolves cleanly. See `ROADMAP.md`.
+  - `raw-runs/minimal-pairs-2026-06-22.md` — the **minimal-pair Judgment suite** (roadmap priority 2):
+    five pairs that flip one causal variable each. Both arms track the variable; the skill's edge is
+    split-discipline + verifier-fidelity calibration. Pre-registered in `cases/minimal-pairs.json`.
   - Full per-run reproduction: `runner/run_eval.py` regenerates the first battery against the API.
   - About 90 runs were executed for the first two records; those raw files keep a representative
     sample since the runner reproduces them on demand. The held-out record keeps every run.

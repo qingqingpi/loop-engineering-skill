@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.1 — 2026-06-22
+
+Eval only; the skill is unchanged at 0.2.0.
+
+### Added
+- `evals/cases/minimal-pairs.json` + `evals/raw-runs/minimal-pairs-2026-06-22.md` — the minimal-pair
+  Judgment suite (roadmap priority 2): five pairs, each the same task with exactly one causal variable
+  flipped (test writability, send gate, feedback density, reversibility, verifier fidelity),
+  pre-registered before the runs. Result: both control and treatment track the causal variable (not
+  danger words); the skill's measurable edge is split-discipline (it holds task loop-fit invariant to a
+  design-only change where the base model lets it bleed GREEN->RED) plus calibrating high-fidelity
+  verifiers as high. One trial per cell, one model (opus).
+- `evals/ROADMAP.md` marks priority 2 done.
+
 ## 0.2.0 — 2026-06-22
 
 Identity and verdict cleanup, plus an eval roadmap.

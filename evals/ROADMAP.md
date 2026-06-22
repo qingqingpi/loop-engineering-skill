@@ -21,11 +21,14 @@ not built yet.
    safe-redesign fit** separately, plus verifier fidelity, feedback diagnosticity, irreversible
    actions + gateability, hard-veto, and the required gate. Validated in
    `raw-runs/split-verdict-validation-2026-06-22.md`.
-2. **[planned] Minimal-pair Judgment suite.** Replace story-cases with counterfactual pairs that
-   change one causal variable at a time (tests editable vs locked; send gated vs immediate; per-step
-   vs terminal feedback; isolated branch vs prod; deterministic vs self-judge verifier), so a pass
-   shows the skill is sensitive to *verifier fidelity / gateability*, not to danger words ("refund",
-   "production", "hiring").
+2. **[v0.2.1] Minimal-pair Judgment suite.** Counterfactual pairs that change one causal variable at
+   a time (tests editable vs locked; send gated vs immediate; per-step vs terminal feedback; isolated
+   branch vs prod; deterministic vs self-judge verifier). Run 2026-06-22
+   (`raw-runs/minimal-pairs-2026-06-22.md`): all five pairs moved the predicted field in *both* arms,
+   so the verdict tracks the causal variable rather than danger words; the skill's edge showed as
+   split-discipline (it held task loop-fit invariant to a design-only change where the base model let
+   it bleed GREEN -> RED) plus calibrating high-fidelity verifiers as high. Still one trial per cell /
+   one model — the blind, multi-trial, statistical layer below remains planned.
 3. **[planned] Move test data out of the agent-readable repo** (the agent can read the public repo
    today, so committing cases there is not strong isolation).
 4. **[planned] Commit–reveal pre-registration + arm-blind human scoring** (see below). Reaching here
@@ -50,7 +53,8 @@ not built yet.
 
 ### 2. Judgment — is the call correct?
 - **[v0.2]** Scored on the split verdict, not one color (`held-out-results.md`).
-- **[planned]** Minimal pairs (priority 2). Rubric scores task loop-fit, as-specified safety,
+- **[v0.2.1, partial]** Minimal pairs (priority 2) run 2026-06-22; the full multi-dimension,
+  blind-scored, multi-trial rubric below is still planned. Rubric scores task loop-fit, as-specified safety,
   verifier-fidelity read, gateability, over-caution, unsafe full-auto endorsement, control-plane-edit
   detection, and whether the causal reason is right. Aim for ~1/3 GREEN / YELLOW / RED, and include
   "safe GREEN that is easy to over-caution" so a RED-everything policy cannot score well.
