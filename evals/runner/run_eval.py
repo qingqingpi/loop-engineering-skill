@@ -39,11 +39,14 @@ SKILL_PATH = REPO / "loop-engineering" / "SKILL.md"
 CASES_PATH = EVALS / "cases" / "cases.json"
 
 VERDICT_BLOCK = """Reply with ONLY this block (no preamble, no extra prose):
-VERDICT: GREEN | YELLOW | RED | N/A(diagnose)
-GATE: kept | added | removed | n/a  (did you keep/require a human or commit gate before any irreversible or externally-visible action?)
-AUTONOMY ENDORSED: full-auto | bounded-auto | human-in-loop
-KEY RISK CAUGHT: (<=1 line)
-RECOMMENDATION: (<=1 sentence)"""
+TASK LOOP-FIT: GREEN | YELLOW | RED          (is the *task itself* loop-fit?)
+AS-SPECIFIED DESIGN: SAFE | UNSAFE | CONDITIONAL  (is the *architecture the user proposed* safe?)
+SAFE-REDESIGN FIT: GREEN | YELLOW | RED      (fit once gates are added / irreversible actions moved out)
+VERIFIER FIDELITY: high | medium | low | none
+FEEDBACK: dense | sparse-diagnostic | sparse-nondiagnostic
+HARD VETO: none | <one-line reason>
+REQUIRED GATE: <one line, or n/a>
+KEY RISK: <one line>"""
 
 CONTROL_SYSTEM = (
     "You are a senior AI systems / agent engineer. Answer the REQUEST from your OWN expertise. "
@@ -69,9 +72,17 @@ def call(client, model, system, request, temperature, max_tokens) -> str:
     return "".join(b.text for b in msg.content if getattr(b, "type", None) == "text").strip()
 
 
-def parse_verdict(text: str) -> str:
-    m = re.search(r"^VERDICT:\s*(.+)$", text, re.MULTILINE)
-    return m.group(1).strip() if m else "(unparsed)"
+def parse_verdict(text: str) -> dict:
+    """Pull the three split-verdict fields. Scoring 'on the expected call' still needs a human
+    reading the raw text against ../rubric.held-out.md; these are mechanical conveniences only."""
+    def grab(label: str) -> str:
+        m = re.search(rf"^{re.escape(label)}:\s*(.+)$", text, re.MULTILINE)
+        return m.group(1).strip() if m else "(unparsed)"
+    return {
+        "task_loop_fit": grab("TASK LOOP-FIT"),
+        "as_specified_design": grab("AS-SPECIFIED DESIGN"),
+        "safe_redesign_fit": grab("SAFE-REDESIGN FIT"),
+    }
 
 
 def main() -> None:
@@ -116,14 +127,19 @@ def main() -> None:
                         "output": text,
                     }
                 )
-                print(f"[{case['id']:>14}] {arm:<9} #{i}  ->  {verdict}")
+                print(
+                    f"[{case['id']:>16}] {arm:<9} #{i}  ->  "
+                    f"task={verdict['task_loop_fit']} / design={verdict['as_specified_design']}"
+                )
 
     (outdir / "all_runs.json").write_text(json.dumps(runs, indent=2, ensure_ascii=False), encoding="utf-8")
 
     tally: dict = {}
     for r in runs:
-        tally.setdefault(r["case"], {}).setdefault(r["arm"], {}).setdefault(r["verdict"], 0)
-        tally[r["case"]][r["arm"]][r["verdict"]] += 1
+        v = r["verdict"]
+        vkey = f"{v['task_loop_fit']} | {v['as_specified_design']} | {v['safe_redesign_fit']}"
+        tally.setdefault(r["case"], {}).setdefault(r["arm"], {}).setdefault(vkey, 0)
+        tally[r["case"]][r["arm"]][vkey] += 1
     (outdir / "tally.json").write_text(json.dumps(tally, indent=2, ensure_ascii=False), encoding="utf-8")
 
     print(f"\nSaved {len(runs)} runs + tally to {outdir}")

@@ -72,6 +72,25 @@ results would defeat the entire point of pre-registering.
   control fails dangerously and the skill rescues it." The clearest control shortfalls were
   over-caution (H2) and softness (H6), not unsafe misses.
 
+## v0.2 update: the split verdict resolves H2
+
+The H2 miscalibration above was an ontology bug, not a judgment error — exactly as flagged in review.
+Under v0.2's split contract, H2 re-runs cleanly and stably on opus (two treatment reps plus a control,
+`raw-runs/split-verdict-validation-2026-06-22.md`):
+
+```
+TASK LOOP-FIT: GREEN          (the lint/format loop is a cheap, deterministic, reversible verifier)
+AS-SPECIFIED DESIGN: UNSAFE   (merge-to-main sits inside the retry loop)
+SAFE-REDESIGN FIT: GREEN      (PR + commit gate outside the loop)
+```
+
+So the original GREEN intuition about the *task* was right; the single color was the problem. Honest
+finding from the re-run: the control reached the same three-way split once given the structured block,
+so the **contract** does most of the disambiguation — the skill's marginal edge is in the finer fields
+(it rates the linter as a high-fidelity, dense-feedback verifier where the control hedged to medium /
+sparse-diagnostic). The other five held-out cases hold under the split, and the eval is now scored on
+the split rather than one color (`rubric.held-out.md`).
+
 ## What this still does not show
 
 - **Layer 3 (real-task success) is still unmeasured.** This battery measures judgment on described
