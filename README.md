@@ -204,6 +204,21 @@ stays silent on a backup script, a deterministic ETL retry, and a parallel resea
 reinforces the same honest finding rather than overturning it: on a strong model the lift is
 consistency, firmness, and sharper vocabulary, not rescue from disaster.
 
+Two later refinements sharpened the eval itself. **The verdict was split** (v0.2): one
+GREEN/YELLOW/RED color was conflating "is the task loop-fit?" with "is the design the user proposed
+safe?", so the lint-and-merge case (a task-fit GREEN loop whose merge-to-main is unsafe) could only
+read as a muddy RED/YELLOW. The eval now reports task loop-fit, as-specified-design safety, and
+safe-redesign fit separately, and that case resolves cleanly and stably (task GREEN, design UNSAFE,
+safe-redesign GREEN); the earlier "mistaken prediction" was the single-color ontology, not a judgment
+error. **A minimal-pair suite** (v0.2.1) then checked whether the skill responds to causal structure
+or to scary words: five pairs each fix the task and flip exactly one variable (editable vs locked
+tests, gated vs immediate send, dense vs quarterly feedback, isolated vs direct-to-prod, deterministic
+vs self-grading verifier). Both controls and skilled agents moved with the variable, so the verdict
+tracks the structure rather than the words, and the skill's edge was to hold task loop-fit invariant to
+a design-only change where the base model let it bleed (a fixed task swinging GREEN to RED when only
+the gate or verifier changed) plus calibrating faithful verifiers as high. The full eval plan is in
+[`evals/ROADMAP.md`](evals/ROADMAP.md).
+
 Full data is in [`evals/`](evals/): the cases, the exact control and treatment prompts, the scoring
 rubric, raw outputs, and a standalone runner that reproduces the first battery against the API. It
 ships with an explicit limitations writeup. The first battery's rubric was author-defined and not
